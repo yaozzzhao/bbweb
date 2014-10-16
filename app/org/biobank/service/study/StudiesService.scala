@@ -243,6 +243,8 @@ class StudiesServiceImpl(implicit inj: Injector)
 
   val processor = injectActorRef [StudiesProcessor] ("study")
 
+  val persistentView = injectActorRef [StudiesPersistentView] ("study-view")
+
   val studyRepository = inject [StudyRepository]
 
   val processingTypeRepository = inject [ProcessingTypeRepository]

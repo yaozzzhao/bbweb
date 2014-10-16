@@ -45,6 +45,7 @@ class UserModule extends Module {
   binding toProvider new SpecimenLinkAnnotationTypeProcessor
   binding toProvider new SpecimenLinkTypeProcessor
   binding toProvider new StudiesProcessor
+  binding toProvider new StudiesPersistentView
 
   binding toProvider new UsersProcessor
 
