@@ -348,7 +348,7 @@ class SpecimensControllerSpec extends ControllerFixture with JsonHelper {
 
     "DELETE  /participants/cevents/spcs/:ceventId/:spcId/:ver" must {
 
-      "111 remove a specimen from a collection event" in {
+      "remove a specimen from a collection event" in {
         createEntities { (centre, study, participant, ceventType, cevent) =>
           val specimen = factory.createUsableSpecimen
           specimenRepository.put(specimen)
@@ -359,7 +359,7 @@ class SpecimensControllerSpec extends ControllerFixture with JsonHelper {
         }
       }
 
-      "111 not remove a specimen which has been processed" in {
+      "not remove a specimen which has been processed" in {
         createEntities { (centre, study, participant, ceventType, cevent) =>
           val specimen = factory.createUsableSpecimen
           specimenRepository.put(specimen)
