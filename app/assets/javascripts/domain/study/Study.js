@@ -326,7 +326,8 @@ define(['angular', 'lodash', 'sprintf', 'tv4'], function(angular, _, sprintf, tv
      *
      * @param {domain.AnnotationType} annotationType - the annotation type with the new values.
      *
-     * @returns {Promise<domain.studies.Study>} A promise containing the study with the updated annotation type.
+     * @returns {Promise<domain.studies.Study>} A promise containing the study with the updated annotation
+     * type.
      */
     Study.prototype.updateAnnotationType = function (annotationType) {
       return this.update.call(this,
@@ -339,7 +340,8 @@ define(['angular', 'lodash', 'sprintf', 'tv4'], function(angular, _, sprintf, tv
      *
      * @param {domain.AnnotationType} annotationType - the annotation type to remove.
      *
-     * @returns {Promise<domain.studies.Study>} A promise containing the study with the removed annotation type.
+     * @returns {Promise<domain.studies.Study>} A promise containing the study with the removed annotation
+     * type.
      */
     Study.prototype.removeAnnotationType = function (annotationType) {
       var url = sprintf.sprintf('%s/%d/%s',

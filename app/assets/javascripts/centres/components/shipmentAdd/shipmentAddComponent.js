@@ -48,14 +48,14 @@ define(['lodash'], function (_) {
       vm.shipment.fromLocationId = vm.selectedFromLocationInfo.locationId;
       vm.shipment.toLocationId = vm.selectedToLocationInfo.locationId;
       vm.shipment.add().then(onAddSuccessful).catch(onAddFailed);
-    }
 
-    function onAddSuccessful(shipment) {
-      $state.go('home.shipping.addSpecimens', { shipmentId: shipment.id });
-    }
+      function onAddSuccessful(shipment) {
+        $state.go('home.shipping.addSpecimens', { shipmentId: shipment.id });
+      }
 
-    function onAddFailed(error) {
-      domainEntityService.updateErrorModal(error, 'shipment');
+      function onAddFailed(error) {
+        domainEntityService.updateErrorModal(error, 'shipment');
+      }
     }
 
     function cancel() {

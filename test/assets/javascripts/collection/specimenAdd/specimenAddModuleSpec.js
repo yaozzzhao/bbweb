@@ -99,7 +99,7 @@ define([
         };
       }));
 
-      it('has valid scope', function() {
+      fit('has valid scope', function() {
         createController.call(this);
 
         expect(this.scope.vm.inventoryId).toBeUndefined();
