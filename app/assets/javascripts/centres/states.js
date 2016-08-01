@@ -49,9 +49,9 @@ define(function () {
       views: {
         'main@': {
           template: [
-            '<shipments-table',
-            '  centre="vm.centre"',
-            '</shipments-table>'
+            '<centre-shipments',
+            '  centre="vm.centre">',
+            '</centre-shipments>'
           ].join(''),
           controller: [ 'centre', function (centre) {
             this.centre = centre;

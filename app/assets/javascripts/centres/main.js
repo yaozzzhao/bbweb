@@ -15,6 +15,7 @@ define(function (require) {
 
   module.config(require('./states'));
 
+  module.component('centreShipments',      require('./components/centreShipments/centreShipmentsComponent'));
   module.component('shippingHome',         require('./components/shippingHome/shippingHomeComponent'));
   module.component('selectCentre',         require('./components/selectCentre/selectCentreComponent'));
   module.component('shipmentAdd',          require('./components/shipmentAdd/shipmentAddComponent'));

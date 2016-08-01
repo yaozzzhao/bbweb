@@ -31,7 +31,11 @@ trait ShipmentValidations {
 
   case object TrackingNumberInvalid extends ValidationKey
 
+  case object FromCentreIdInvalid extends ValidationKey
+
   case object FromLocationIdInvalid extends ValidationKey
+
+  case object ToCentreIdInvalid extends ValidationKey
 
   case object ToLocationIdInvalid extends ValidationKey
 
@@ -82,7 +86,9 @@ final case class Shipment(id:             ShipmentId,
                           state:          ShipmentState,
                           courierName:    String,
                           trackingNumber: String,
+                          fromCentreId:   CentreId,
                           fromLocationId: String,
+                          toCentreId:     CentreId,
                           toLocationId:   String,
                           timePacked:     Option[DateTime],
                           timeSent:       Option[DateTime],
@@ -116,21 +122,25 @@ final case class Shipment(id:             ShipmentId,
   /**
    * Must be a centre's location.
    */
-  def withFromLocation(location: Location): DomainValidation[Shipment] =
-    validateString(location.uniqueId, LocationIdInvalid).map { _ =>
-      copy(fromLocationId = location.uniqueId,
-           version        = version + 1,
-           timeModified   = Some(DateTime.now))
+  def withFromLocation(centre: Centre, location: Location): DomainValidation[Shipment] =
+    (validateString(location.uniqueId, LocationIdInvalid) |@|
+       centre.locationWithId(location.uniqueId)) { case (_, _) =>
+        copy(fromCentreId   = centre.id,
+             fromLocationId = location.uniqueId,
+             version        = version + 1,
+             timeModified   = Some(DateTime.now))
     }
 
   /**
    * Must be a centre's location.
    */
-  def withToLocation(location: Location): DomainValidation[Shipment] =
-    validateString(location.uniqueId, LocationIdInvalid).map { _ =>
-      copy(toLocationId = location.uniqueId,
-           version      = version + 1,
-           timeModified = Some(DateTime.now))
+  def withToLocation(centre: Centre, location: Location): DomainValidation[Shipment] =
+    (validateString(location.uniqueId, LocationIdInvalid) |@|
+       centre.locationWithId(location.uniqueId)) { case (_, _) =>
+        copy(toCentreId   = centre.id,
+             toLocationId = location.uniqueId,
+             version      = version + 1,
+             timeModified = Some(DateTime.now))
     }
 
   def packed(time: DateTime): DomainValidation[Shipment] =
@@ -253,7 +263,9 @@ final case class Shipment(id:             ShipmentId,
         |  state:          $state,
         |  courierName:    $courierName,
         |  trackingNumber: $trackingNumber,
+        |  fromCentreId:   $fromCentreId,
         |  fromLocationId: $fromLocationId,
+        |  toCentreId:     $toCentreId,
         |  toLocationId:   $toLocationId,
         |  timePacked:     $timePacked,
         |  timeSent:       $timeSent,
@@ -272,7 +284,9 @@ object Shipment extends ShipmentValidations {
              state:          ShipmentState,
              courierName:    String,
              trackingNumber: String,
+             fromCentreId:   CentreId,
              fromLocationId: String,
+             toCentreId:     CentreId,
              toLocationId:   String,
              timePacked:     Option[DateTime],
              timeSent:       Option[DateTime],
@@ -283,7 +297,9 @@ object Shipment extends ShipmentValidations {
              state,
              courierName,
              trackingNumber,
+             fromCentreId,
              fromLocationId,
+             toCentreId,
              toLocationId,
              timePacked,
              timeSent,
@@ -295,7 +311,9 @@ object Shipment extends ShipmentValidations {
                                              state,
                                              courierName,
                                              trackingNumber,
+                                             fromCentreId,
                                              fromLocationId,
+                                             toCentreId,
                                              toLocationId,
                                              timePacked,
                                              timeSent,
@@ -308,7 +326,9 @@ object Shipment extends ShipmentValidations {
                state:          ShipmentState,
                courierName:    String,
                trackingNumber: String,
+               fromCentreId:   CentreId,
                fromLocationId: String,
+               toCentreId:     CentreId,
                toLocationId:   String,
                timePacked:     Option[DateTime],
                timeSent:       Option[DateTime],
@@ -318,12 +338,14 @@ object Shipment extends ShipmentValidations {
        validateVersion(version) |@|
        validateString(courierName, CourierNameInvalid) |@|
        validateString(trackingNumber, TrackingNumberInvalid) |@|
+       validateId(fromCentreId, FromCentreIdInvalid) |@|
        validateString(fromLocationId, FromLocationIdInvalid) |@|
+       validateId(toCentreId, ToCentreIdInvalid) |@|
        validateString(toLocationId, ToLocationIdInvalid) |@|
        validateTimeAfter(timeSent, timePacked, TimePackedUndefined, TimeSentBeforePacked)  |@|
        validateTimeAfter(timeReceived, timeSent, TimeSentUndefined, TimeReceivedBeforeSent)  |@|
        validateTimeAfter(timeUnpacked, timeReceived, TimeReceivedUndefined, TimeUnpackedBeforeReceived)) {
-      case (_, _, _, _, _, _, _, _, _) => true
+      case (_, _, _, _, _, _, _, _, _, _, _) => true
     }
 
   }

@@ -26,7 +26,8 @@ import scalaz.Validation.FlatMap._
 @ImplementedBy(classOf[ShipmentsServiceImpl])
 trait ShipmentsService {
 
-  def getShipments(courierFilter:        String,
+  def getShipments(centreId:             String,
+                   courierFilter:        String,
                    trackingNumberFilter: String,
                    stateFilter:          String,
                    sortBy:               String,
@@ -68,7 +69,8 @@ class ShipmentsServiceImpl @Inject() (@Named("shipmentsProcessor") val   process
 
   implicit val timeout: Timeout = 5.seconds
 
-  def getShipments(courierFilter:        String,
+  def getShipments(centreId:             String,
+                   courierFilter:        String,
                    trackingNumberFilter: String,
                    stateFilter:          String,
                    sortBy:               String,
@@ -76,13 +78,13 @@ class ShipmentsServiceImpl @Inject() (@Named("shipmentsProcessor") val   process
       : ServiceValidation[List[ShipmentDto]] = {
     ShipmentDto.sort2Compare.get(sortBy).toSuccessNel(ServiceError(s"invalid sort field: $sortBy"))
       .flatMap { sortFunc =>
-      val allShipments = shipmentRepository.getValues
+      val centreShipments = shipmentRepository.withCentre(CentreId(centreId))
 
       val shipmentsFilteredByCourier = if (!courierFilter.isEmpty) {
           val courierLowerCase = courierFilter.toLowerCase
-          allShipments.filter { _.courierName.toLowerCase.contains(courierLowerCase)}
+          centreShipments.filter { _.courierName.toLowerCase.contains(courierLowerCase)}
         } else {
-          allShipments
+          centreShipments
         }
 
       val shipmentsFilteredByTrackingNumber = if (!trackingNumberFilter.isEmpty) {

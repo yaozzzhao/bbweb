@@ -235,6 +235,8 @@ define(function (require) {
      *
      * <p>A paged API is used to list shipments. See below for more details.</p>
      *
+     * @param {String} centreId - The ID for the centre to list shipments for.
+     *
      * @param {object} options - The options to use to list shipments.
      *
      * @param {string} options.courierFilter The filter to use on courier names. Default is empty string.
@@ -259,8 +261,8 @@ define(function (require) {
      *
      * @return A promise. If the promise succeeds then a paged result is returned.
      */
-    Shipment.list = function (options) {
-      var url = uri(),
+    Shipment.list = function (centreId, options) {
+      var url = uri() + '/list/' + centreId,
           params,
           validKeys = [
             'courierFilter',
