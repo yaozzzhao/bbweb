@@ -11,6 +11,7 @@ define(function (require) {
 
   ShipmentFactory.$inject = [
     '$q',
+    '$log',
     'ConcurrencySafeEntity',
     'DomainError',
     'ShipmentState',
@@ -18,6 +19,7 @@ define(function (require) {
   ];
 
   function ShipmentFactory($q,
+                           $log,
                            ConcurrencySafeEntity,
                            DomainError,
                            ShipmentState,
@@ -153,7 +155,7 @@ define(function (require) {
        */
 
       obj = obj || {};
-      ConcurrencySafeEntity.call(this, obj);
+      ConcurrencySafeEntity.call(this);
       _.extend(this, obj);
     }
 
@@ -180,7 +182,7 @@ define(function (require) {
      */
     Shipment.create = function (obj) {
       if (!tv4.validate(obj, schema)) {
-        console.error('invalid object from server: ' + tv4.error);
+        $log.error('invalid object from server: ' + tv4.error);
         throw new DomainError('invalid object from server: ' + tv4.error);
       }
 
@@ -204,7 +206,7 @@ define(function (require) {
       var deferred = $q.defer();
 
       if (!tv4.validate(obj, schema)) {
-        console.error('invalid object from server: ' + tv4.error);
+        $log.error('invalid object from server: ' + tv4.error);
         deferred.reject('invalid object from server: ' + tv4.error);
       } else {
         deferred.resolve(new Shipment(obj));

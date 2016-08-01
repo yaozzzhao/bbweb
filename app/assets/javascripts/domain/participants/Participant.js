@@ -55,7 +55,7 @@ define(['lodash', 'tv4', 'sprintf'], function(_, tv4, sprintf) {
 
       obj = obj || {};
       ConcurrencySafeEntity.call(this, obj);
-      _.extend(this, defaults, _.pick(obj, _.keys(defaults)));
+      _.extend(this, obj);
 
       if (study) {
         this.setStudy(study);

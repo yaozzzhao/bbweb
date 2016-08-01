@@ -70,7 +70,8 @@ define(['lodash', 'tv4', 'sprintf'], function(_, tv4, sprintf) {
       obj = obj || {};
       options = options || {};
       ConcurrencySafeEntity.call(self, obj);
-      _.extend(self, defaults, _.pick(obj, _.keys(defaults)), _.pick(options, 'study'));
+      _.extend(self, obj, _.pick(options, 'study'));
+
 
       this.specimenSpecs = _.map(this.specimenSpecs, function (specimenSpec) {
         return new CollectionSpecimenSpec(specimenSpec);
