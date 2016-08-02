@@ -39,22 +39,51 @@ define(['lodash', 'tv4', 'sprintf'], function(_, tv4, sprintf) {
     };
 
     /**
+     * Use this contructor to create a new Participant to be persited on the server. Use [create()]{@link
+     * domain.studies.Participant.create} or [asyncCreate()]{@link domain.studies.Particiapnt.asyncCreate} to
+     * create objects returned by the server.
+     *
+     * @classdesc The subject for which a set of specimens were collected from. The subject can be human or
+     * non human. A participant belongs to a single [Study]{@link domain.studies.Study}.
+     *
+     * @class
+     * @memberOf domain.studies
+     * @extends domain.ConcurrencySafeEntity
+     *
      * To convert server side annotations to Annotation class call setAnnotationTypes().
      *
-     * @param {object} obj.annotations - server response for annotation.
+     * @param {object} [obj={}] - An initialization object whose properties are the same as the members from
+     * this class. Objects of this type are usually returned by the server's REST API.
      *
-     * @param {study} study The study this participant is a member of.
      */
     function Participant(obj, study) {
-      var defaults = {
-        study:       null,
-        studyId:     null,
-        uniqueId:    '',
-        annotations: []
-      };
+      /**
+       * A participant has a unique identifier that is used to identify the participant in the system. This
+       * identifier is not the same as the <code>id</code> value object used by the domain model.
+       *
+       * @name domain.studies.Participant#uniqueId
+       * @type {string}
+       */
+      this.uniqueId = null;
+
+      /**
+       * The study identifier for the [Study]{@link domain.studies.Study} this participant belongs to.
+       *
+       * @name domain.studies.Participant#studyId
+       * @type {string}
+       */
+      this.studyId = null;
+
+      /**
+       * The values of the [Annotations]{@link domain.Annotation} collected for this participant.
+       *
+       * @name domain.studies.Participant#annotations
+       * @type {Array<domain.Annotation>}
+       */
+      this.annotations = [];
 
       obj = obj || {};
-      ConcurrencySafeEntity.call(this, obj);
+      ConcurrencySafeEntity.call(this);
       _.extend(this, obj);
 
       if (study) {
@@ -67,7 +96,15 @@ define(['lodash', 'tv4', 'sprintf'], function(_, tv4, sprintf) {
     Participant.prototype.constructor = Participant;
 
     /**
-     * Used by promise code, so it must return an error rather than throw one.
+     * Creates a Study, but first it validates <code>obj</code> to ensure that it has a valid schema.
+     *
+     * @param {object} [obj={}] - An initialization object whose properties are the same as the members from
+     * this class. Objects of this type are usually returned by the server's REST API.
+     *
+     * @returns {Study} A study created from the given object.
+     *
+     * @see [asyncCreate()]{@link domain.studies.Study.asyncCreate} when you need to create
+     * a study within asynchronous code.
      */
     Participant.create = function (obj) {
       if (!tv4.validate(obj, schema)) {

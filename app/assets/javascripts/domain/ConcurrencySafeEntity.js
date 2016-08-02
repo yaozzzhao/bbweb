@@ -8,6 +8,17 @@ define(['angular', 'lodash'], function(angular, _) {
   ConcurrencySafeEntityFactory.$inject = [ '$q', 'biobankApi' ];
 
   /**
+   * @typedef domain.Validation
+   *
+   * @type object
+   *
+   * @property {boolean} valid - True when the validation check passed all checks.
+   *
+   * @property {string} message - A message that explains why the validation failed. The message is an empty
+   * string if the validation passed all checks.
+   */
+
+  /**
    * AngularJS factory for participants.
    *
    */

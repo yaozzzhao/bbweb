@@ -104,7 +104,7 @@ define(['lodash', 'tv4', 'sprintf'], function(_, tv4, sprintf) {
        * The annotations assigned to this collection event.
        *
        * @name domain.participants.CollectionEvent#annotations
-       * @type {Array<domain.AnnotationType}
+       * @type {Array<domain.Annotation>}
        */
       this.annotations = null;
 

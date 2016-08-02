@@ -17,7 +17,8 @@ define(function (require) {
 
   module.factory('AnnotationTypeViewer',                require('./AnnotationTypeViewer'));
   module.factory('ConcurrencySafeEntity',               require('./ConcurrencySafeEntity'));
-  module.service('domainEntityService',                 require('./domainEntityService') );
+  module.factory('DomainEntityFactory',                 require('./DomainEntityFactory'));
+  module.factory('domainEntityService',                 require('./domainEntityService') );
   module.factory('DomainError',                         require('./DomainError'));
   module.factory('EntityViewer',                        require('./EntityViewer'));
   module.factory('Location',                            require('./Location'));
@@ -60,6 +61,7 @@ define(function (require) {
   module.factory('SpecimenLinkAnnotationType',          require('./study/SpecimenLinkAnnotationType'));
   module.factory('SpecimenLinkType',                    require('./study/SpecimenLinkType'));
   module.factory('Study',                               require('./study/Study'));
+  module.service('StudyFactory',                        require('./study/StudyFactory'));
   module.factory('StudyCounts',                         require('./study/StudyCounts'));
   module.factory('StudyAnnotationType',                 require('./study/StudyAnnotationType'));
   module.factory('StudyViewer',                         require('./study/StudyViewer'));
