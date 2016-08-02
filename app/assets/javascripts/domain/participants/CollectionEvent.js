@@ -87,7 +87,7 @@ define(['lodash', 'tv4', 'sprintf'], function(_, tv4, sprintf) {
       /**
        * The number assigned to the collection event.
        *
-       * @name domain.participants#visitNumber
+       * @name domain.participants.CollectionEvent#visitNumber
        * @type {integer}
        */
       this.visitNumber = null;
@@ -95,10 +95,18 @@ define(['lodash', 'tv4', 'sprintf'], function(_, tv4, sprintf) {
       /**
        * The time this collection event was completed at.
        *
-       * @name domain.participants#timeCompleted
+       * @name domain.participants.CollectionEvent#timeCompleted
        * @type {Date}
        */
       this.timeCompleted = null;
+
+      /**
+       * The annotations assigned to this collection event.
+       *
+       * @name domain.participants.CollectionEvent#annotations
+       * @type {Array<domain.AnnotationType}
+       */
+      this.annotations = null;
 
       obj = obj || {};
       ConcurrencySafeEntity.call(this);
