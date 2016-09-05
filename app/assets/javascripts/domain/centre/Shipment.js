@@ -370,6 +370,17 @@ define(function (require) {
     };
 
     /**
+     * Changes the state of this shipment to <code>Created</code>.
+     *
+     * @see [ShipmentState]{@link domain.centres.ShipmentState}
+     *
+     * @returns {Promise} A copy of this shipment, but with the state set to Created.
+     */
+    Shipment.prototype.created = function () {
+      return this.update.call(this, uri('created', this.id));
+    };
+
+    /**
      * Changes the state of this shipment to <code>Packed</code>.
      *
      * @param {Date} The date and time this shipment's state was changed.
@@ -444,7 +455,7 @@ define(function (require) {
       return this.state === ShipmentState.SENT;
     };
 
-    Shipment.prototype.isNotCreatedOrUnpacked = function () {
+    Shipment.prototype.isNotCreatedNorUnpacked = function () {
       return (this.state !== ShipmentState.CREATED) && (this.state !== ShipmentState.UNPACKED);
     };
 

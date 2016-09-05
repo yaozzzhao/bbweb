@@ -19,7 +19,7 @@ define(function (require) {
   ShipmentAddItemsController.$inject = [
     '$state',
     'gettextCatalog' ,
-    'shipmentProgressItems',
+    'shipmentSendProgressItems',
     'Shipment',
     'modalInput',
     'modalService',
@@ -34,7 +34,7 @@ define(function (require) {
    */
   function ShipmentAddItemsController($state,
                                       gettextCatalog,
-                                      shipmentProgressItems,
+                                      shipmentSendProgressItems,
                                       Shipment,
                                       modalInput,
                                       modalService,
@@ -46,10 +46,10 @@ define(function (require) {
     vm.shipment      = null;
     vm.allItemsAdded = allItemsAdded;
 
-     vm.progressInfo = {
-        items: shipmentProgressItems,
-        current: 2
-     };
+    vm.progressInfo = {
+      items: shipmentSendProgressItems,
+      current: 2
+    };
 
     //--
 

@@ -135,6 +135,9 @@ class ShipmentsController @Inject() (val env:              Environment,
   def updateToLocation(id: String) =
     commandActionAsync(Json.obj("id" -> id)) { cmd : UpdateShipmentToLocationCmd => processCommand(cmd) }
 
+  def created(id: String) =
+    commandActionAsync(Json.obj("id" -> id)) { cmd : ShipmentCreatedCmd => processCommand(cmd) }
+
   def packed(id: String) =
     commandActionAsync(Json.obj("id" -> id)) { cmd : ShipmentPackedCmd => processCommand(cmd) }
 

@@ -150,6 +150,7 @@ POST    /shipments/courier/:id                        org.biobank.controllers.ce
 POST    /shipments/trackingnumber/:id                 org.biobank.controllers.centres.ShipmentsController.updateTrackingNumber(id)
 POST    /shipments/fromlocation/:id                   org.biobank.controllers.centres.ShipmentsController.updateFromLocation(id)
 POST    /shipments/tolocation/:id                     org.biobank.controllers.centres.ShipmentsController.updateToLocation(id)
+POST    /shipments/created/:id                        org.biobank.controllers.centres.ShipmentsController.created(id)
 POST    /shipments/packed/:id                         org.biobank.controllers.centres.ShipmentsController.packed(id)
 POST    /shipments/sent/:id                           org.biobank.controllers.centres.ShipmentsController.sent(id)
 POST    /shipments/received/:id                       org.biobank.controllers.centres.ShipmentsController.received(id)

@@ -19,7 +19,7 @@ define(['lodash'], function (_) {
     'Shipment',
     'domainNotificationService',
     'notificationsService',
-    'shipmentProgressItems'
+    'shipmentSendProgressItems'
   ];
 
   /**
@@ -31,11 +31,11 @@ define(['lodash'], function (_) {
                                  Shipment,
                                  domainNotificationService,
                                  notificationsService,
-                                 shipmentProgressItems) {
+                                 shipmentSendProgressItems) {
     var vm = this;
 
     vm.progressInfo = {
-      items: shipmentProgressItems,
+      items: shipmentSendProgressItems,
       current: 1
     };
 

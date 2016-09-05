@@ -45,6 +45,7 @@ class ShipmentsProcessor @Inject() (val shipmentRepository:         ShipmentRepo
       case et: ShipmentEvent.EventType.TrackingNumberUpdated => applyTrackingNumberUpdatedEvent(event)
       case et: ShipmentEvent.EventType.FromLocationUpdated   => applyFromLocationUpdatedEvent(event)
       case et: ShipmentEvent.EventType.ToLocationUpdated     => applyToLocationUpdatedEvent(event)
+      case et: ShipmentEvent.EventType.Created               => applyCreatedEvent(event)
       case et: ShipmentEvent.EventType.Packed                => applyPackedEvent(event)
       case et: ShipmentEvent.EventType.Sent                  => applySentEvent(event)
       case et: ShipmentEvent.EventType.Received              => applyReceivedEvent(event)
@@ -89,6 +90,9 @@ class ShipmentsProcessor @Inject() (val shipmentRepository:         ShipmentRepo
 
     case cmd: UpdateShipmentToLocationCmd =>
       processUpdateCmd(cmd, updateToLocationCmdToEvent, applyToLocationUpdatedEvent)
+
+    case cmd: ShipmentCreatedCmd =>
+      processUpdateCmd(cmd, createdCmdToEvent, applyCreatedEvent)
 
     case cmd: ShipmentPackedCmd =>
       processUpdateCmd(cmd, packedCmdToEvent, applyPackedEvent)
@@ -213,6 +217,16 @@ class ShipmentsProcessor @Inject() (val shipmentRepository:         ShipmentRepo
       _.time                         := ISODateTimeFormat.dateTime.print(DateTime.now),
       _.toLocationUpdated.version    := cmd.expectedVersion,
       _.toLocationUpdated.locationId := cmd.locationId)
+  }
+
+  private def createdCmdToEvent(cmd: ShipmentCreatedCmd,
+                               shipment: Shipment): ServiceValidation[ShipmentEvent] = {
+    shipment.created.map { _ =>
+      ShipmentEvent(shipment.id.id).update(
+        _.userId          := cmd.userId,
+        _.time            := ISODateTimeFormat.dateTime.print(DateTime.now),
+        _.created.version := cmd.expectedVersion)
+    }
   }
 
   private def packedCmdToEvent(cmd: ShipmentPackedCmd,
@@ -459,6 +473,16 @@ class ShipmentsProcessor @Inject() (val shipmentRepository:         ShipmentRepo
           updated  <- shipment.withToLocation(centre, location)
         } yield updated
       v.foreach(s => shipmentRepository.put(s.copy(timeModified = Some(time))))
+      v.map(_ => true)
+    }
+  }
+
+  private def applyCreatedEvent(event: ShipmentEvent): Unit = {
+    onValidEventAndVersion(event,
+                           event.eventType.isCreated,
+                           event.getCreated.getVersion) { (shipment, _, time) =>
+      val v = shipment.created
+      v.foreach { s => shipmentRepository.put(s.copy(timeModified = Some(time))) }
       v.map(_ => true)
     }
   }

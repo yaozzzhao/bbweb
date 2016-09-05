@@ -22,7 +22,6 @@ define(function (require) {
     '$filter',
     'gettextCatalog',
     'Centre',
-    'shipmentProgressItems',
     'modalInput',
     'notificationsService',
     'centreLocationsModalService'
@@ -34,7 +33,6 @@ define(function (require) {
   function ShippingInfoViewController($filter,
                                       gettextCatalog,
                                       Centre,
-                                      shipmentProgressItems,
                                       modalInput,
                                       notificationsService,
                                       centreLocationsModalService) {
@@ -45,7 +43,6 @@ define(function (require) {
 
     vm.$onChanges         = onChanges;
     vm.panelButtonClicked = panelButtonClicked;
-
 
     //--
 
@@ -65,10 +62,14 @@ define(function (require) {
       };
 
       if (!vm.readOnly) {
-        properties.courier.allowEdit(editCourierName,           gettextCatalog.getString('Update courier'));
-        properties.trackingNumber.allowEdit(editTrackingNumber, gettextCatalog.getString('Update tracking number'));
-        properties.fromLocation.allowEdit(editFromLocation,     gettextCatalog.getString('Update from location'));
-        properties.toLocation.allowEdit(editToLocation,         gettextCatalog.getString('Update to location'));
+        properties.courier.allowEdit(editCourierName,
+                                     gettextCatalog.getString('Update courier'));
+        properties.trackingNumber.allowEdit(editTrackingNumber,
+                                            gettextCatalog.getString('Update tracking number'));
+        properties.fromLocation.allowEdit(editFromLocation,
+                                          gettextCatalog.getString('Update from location'));
+        properties.toLocation.allowEdit(editToLocation,
+                                        gettextCatalog.getString('Update to location'));
       }
 
       vm.displayProperties = _.values(properties);
@@ -76,27 +77,32 @@ define(function (require) {
 
     function displayPropertiesByState() {
       if (vm.shipment.timePacked) {
-        vm.displayProperties.push(new DisplayProperty(gettextCatalog.getString('Time packed'),
-                                                      $filter('localTime')(vm.shipment.timePacked)));
+        vm.displayProperties.push(
+          new DisplayProperty(gettextCatalog.getString('Time packed'),
+                              $filter('localTime')(vm.shipment.timePacked)));
       }
 
       if (vm.shipment.timeSent) {
-        vm.displayProperties.push(new DisplayProperty(gettextCatalog.getString('Time sent'),
-                                                      $filter('localTime')(vm.shipment.timeSent)));
+        vm.displayProperties.push(
+          new DisplayProperty(gettextCatalog.getString('Time sent'),
+                              $filter('localTime')(vm.shipment.timeSent)));
       }
 
       if (vm.shipment.timeReceived) {
-        vm.displayProperties.push(new DisplayProperty(gettextCatalog.getString('Time received'),
-                                                      $filter('localTime')(vm.shipment.timeReceived)));
+        vm.displayProperties.push(
+          new DisplayProperty(gettextCatalog.getString('Time received'),
+                              $filter('localTime')(vm.shipment.timeReceived)));
       }
 
-      if (vm.shipment.isNotCreatedOrUnpacked()) {
-        vm.displayProperties.push(new DisplayProperty(gettextCatalog.getString('Number of specimens'),
-                                                      vm.shipment.specimenCount));
+      if (vm.shipment.isNotCreatedNorUnpacked()) {
+        vm.displayProperties.push(
+          new DisplayProperty(gettextCatalog.getString('Number of specimens'),
+                              vm.shipment.specimenCount));
 
         if (vm.shipment.containerCount) {
-          vm.displayProperties.push(new DisplayProperty(gettextCatalog.getString('Number of containers'),
-                                                        vm.shipment.specimenCount));
+          vm.displayProperties.push(
+            new DisplayProperty(gettextCatalog.getString('Number of containers'),
+                                vm.shipment.specimenCount));
         }
       }
     }
