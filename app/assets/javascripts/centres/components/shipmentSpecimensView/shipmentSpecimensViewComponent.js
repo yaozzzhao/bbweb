@@ -43,11 +43,12 @@ define(function (require) {
     var vm = this;
 
     vm.shipmentSpecimens = [];
+    vm.refresh = 0;
     vm.panelOpen = true;
 
     vm.panelButtonClicked     = panelButtonClicked;
     vm.addSpecimen            = addSpecimen;
-    vm.getTableData           = getTableData;
+    vm.getSpecimens           = getSpecimens;
     vm.removeShipmentSpecimen = removeShipmentSpecimen;
 
     //---
@@ -80,7 +81,7 @@ define(function (require) {
                 }
 
                 return ShipmentSpecimen.add(vm.shipment.id, specimen.id)
-                  .then(reloadTableData)
+                  .then(refreshShipmentSpecimens)
                   .catch(function (error) {
                     var message;
 
@@ -112,34 +113,15 @@ define(function (require) {
         });
     }
 
-    function getTableData(tableState, controller) {
-      if (!vm.shipment) { return; }
-
-      var pagination    = tableState.pagination,
-          sortPredicate = tableState.sort.predicate || 'inventoryId',
-          sortOrder     = tableState.sort.reverse || false,
-          options = {
-            sort:     sortPredicate,
-            page:     1 + (pagination.start / vm.pageSize),
-            pageSize: vm.pageSize,
-            order:    sortOrder ? 'desc' : 'asc'
-          };
-
-      if (!vm.tableController && controller) {
-        vm.tableController = controller;
-      }
-
-      vm.tableDataLoading = true;
-
-      ShipmentSpecimen.list(vm.shipment.id, options).then(function (paginatedResult) {
-        vm.shipmentSpecimens = paginatedResult.items;
-        tableState.pagination.numberOfPages = paginatedResult.maxPages;
-        vm.tableDataLoading = false;
-      });
+    function getSpecimens(options) {
+      return ShipmentSpecimen.list(vm.shipment.id, options)
+        .then(function (paginatedResult) {
+          return { items: paginatedResult.items, maxPages: paginatedResult.maxPages };
+        });
     }
 
-    function reloadTableData() {
-      getTableData(vm.tableController.tableState());
+    function refreshShipmentSpecimens() {
+      vm.refresh += 1;
     }
 
     function removeShipmentSpecimen(shipmentSpecimen) {
@@ -153,12 +135,12 @@ define(function (require) {
         gettextCatalog.getString('Remove failed'),
         gettextCatalog.getString(
           'Specimen with ID {{id}} cannot be removed',
-          { id: shipmentSpecimen.specimen.inventoryId }));
+          { id: shipmentSpecimen.specimen.inventoryId })).then();
 
       function promiseFn() {
         return shipmentSpecimen.remove().then(function () {
           notificationsService.success(gettextCatalog.getString('Specimen removed'));
-          reloadTableData();
+          refreshShipmentSpecimens();
         });
       }
     }

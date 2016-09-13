@@ -33,24 +33,23 @@ define(function (require) {
     .component('shipmentViewPacked',   require('./components/shipmentViewPacked/shipmentViewPackedComponent'))
     .component('shipmentViewSent',     require('./components/shipmentViewSent/shipmentViewSentComponent'))
     .component(
+      'shipmentSpecimensTable',
+      require('./components/shipmentSpecimensTable/shipmentSpecimensTableComponent'))
+    .component(
       'shipmentViewReceived',
-      require('./components/shipmentViewReceived/shipmentViewReceivedComponent')
-    )
+      require('./components/shipmentViewReceived/shipmentViewReceivedComponent'))
     .component('shipmentUnpack',       require('./components/shipmentUnpack/shipmentUnpackComponent'))
     .component('shipmentsTable',       require('./components/shipmentsTable/shipmentsTableComponent'))
     .component(
       'shipmentSpecimensView',
-      require('./components/shipmentSpecimensView/shipmentSpecimensViewComponent')
-    )
+      require('./components/shipmentSpecimensView/shipmentSpecimensViewComponent'))
     .component(
       'shipmentSpecimensReceive',
-      require('./components/shipmentSpecimensReceive/shipmentSpecimensReceiveComponent')
-    )
+      require('./components/shipmentSpecimensReceive/shipmentSpecimensReceiveComponent'))
     .service('centreStatusLabel', require('./services/centreStatusLabelService'))
     .service(
       'centreLocationsModalService',
-      require('./services/centreLocationsModal/centreLocationsModalService')
-    );
+      require('./services/centreLocationsModal/centreLocationsModalService'));
 
   return module;
 });
